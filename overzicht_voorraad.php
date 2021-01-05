@@ -89,7 +89,7 @@ if (isset($_GET['productcode'])) {
 			<div class="content">
 								<?php
 					$db = new database();
-					$db->get_aantal_information(null);
+					$db->get_aantal_information();
 					$results = $db->get_product_information();
 					$columns = array_keys($results[0]);
 					?>

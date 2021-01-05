@@ -548,18 +548,41 @@ class database{
 		return $results;		
 	}
 
-	public function get_aantal_information($aantal){
+	public function get_aantal_information(){
 		$sql = "SELECT aantal FROM voorraad ";
 		$stmt = $this->db->prepare($sql);
-		$stmt->execute(['aantal'=>$aantal]);		
-		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);				
-		$minimumVoorraad= 5;
-			if ($aantal < $minimumVoorraad){
-			
-				echo "Heet aantal producten zit onder de minimum voorraad. U moet het product bij bestellen!";
-			}	
+		$stmt->execute([]);		
+		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$minimaal_aantal = 5;
+		foreach ($results as $value)
+		{//Omdat $results een array is met als inhoudt meerdere Arrays loopen wij 2 keer. 1 keer om de resultaten te 'openen' en daarna nog eens om door de voorraad van het artikel zelf te loopen.
+			foreach($value as $voorraadhvl)
+			{
+				if($voorraadhvl <= $minimaal_aantal)
+				{
+					echo "<font color='red'><b>One of your items is below minimum stock. Please restock!</b></font>";
+				}
+			}
+		}
+/*		foreach($results as $voorraadnu)
+		{
+			if($results.$voorraadnu <= 5)
+			{
+				echo "<script type='text/javascript'>alert('The stock is under the minimum stock. Restock it!');</script>";
+			}
+		}*/
+//			if($results <= 5){
+//				echo "<script type='text/javascript'>alert('The stock is under the minimum stock. Restock it!');</script>";
+//			}
 		return $results;		
 	}
+
+	/*public function ifUnderMinQuantity(){
+		
+		if (get_aantal_information() <= 5) {
+			echo "<script type='text/javascript'>alert('The stock is under the minimum stock. Restock it!');</script>";
+		}
+	}*/
 
 	public function get_reservatie_information(){		
 		$sql = "SELECT reservatiecode, artikel.product, klant.voorletters, klant.achternaam, notes, reservatie_datum, reservatie_tijd 
